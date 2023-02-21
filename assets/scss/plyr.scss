@@ -1,0 +1,30 @@
+.plyr { min-width: 120px; }
+
+.plyr__tooltip {
+  display: none;
+}
+
+.plyr__controls {
+  display: inline-flex;
+	justify-content: flex-start;
+}
+
+.plyr--audio .plyr__controls {
+  background: transparent;
+  color: #fff;
+  padding: 0;
+}
+
+.plyr__controls .plyr__controls__item:first-child {
+    margin-left: 0;
+		margin-right: 0;
+}
+
+.plyr__controls .plyr__controls__item {
+    margin: 0;
+}
+
+.plyr__control:hover {
+  background: #00b2ff;
+  color: #fff;
+}

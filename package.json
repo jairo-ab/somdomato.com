@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "@skjnldsv/vue-plyr": "^7.3.0",
     "bootstrap": "^5.2.3"
   }
 }
