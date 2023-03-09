@@ -8,6 +8,7 @@ Environment=NITRO_PORT=3000
 Environment=NITRO_HOST=127.0.0.1
 Type=simple
 User=nginx
+WorkingDirectory=/var/www/somdomato.com
 ExecStart=/usr/bin/node /var/www/somdomato.com/.output/server/index.mjs
 Restart=on-failure
 
