@@ -36,5 +36,5 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
             [ -f .env ] || cp .env.production .env
             pnpm install
-            pnpm build
-            sudo /usr/bin/systemctl restart nodejs
+            pnpm run build
+            sudo /usr/bin/systemctl restart nuxt.service
