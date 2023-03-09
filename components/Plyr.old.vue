@@ -32,12 +32,16 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="d-flex flex-column flex-md-row align-items-center">
+  <!-- <div style="display: inline-flex; align-items: center"> -->
+  <div class="d-flex d-md-inline-flex" style="align-items: center">
     {{ song }}
 
-    <div class="mt-2 mt-md-0" style="display: inline-flex; align-items: center">
+    <div class="ms-2" style="display: inline-flex; align-items: center">
       <div class="plyr__controls">
         <button @click.prevent="reload()" class="plyr__controls__item plyr__control" type="button" data-plyr="play" aria-label="Pause">
+          <svg class="icon--pressed" aria-hidden="true" focusable="false">
+            <use xlink:href="#plyr-restart"></use>
+          </svg>
           <svg class="icon--not-pressed" aria-hidden="true" focusable="false">
             <use xlink:href="#plyr-restart"></use>
           </svg>
@@ -46,7 +50,7 @@ onMounted(() => {
       </div>
 
       <vue-plyr>
-        <audio ref="player" crossorigin="true" controls>
+        <audio ref="player" crossorigin="true" controls playsinline>
           <source ref="source" src="https://radio.somdomato.com/geral" type="audio/mp3" />
         </audio>
       </vue-plyr>
@@ -54,7 +58,7 @@ onMounted(() => {
   </div>
 </template>
 <style scoped>
-/* .plyr__controls>button,
+.plyr__controls > button,
 .plyr__controls__item .plyr__control,
 .plyr__control {
   color: #fff !important;
@@ -64,5 +68,5 @@ onMounted(() => {
 .plyr--audio .plyr__control {
   background: #00b2ff;
   color: #fff;
-} */
+}
 </style>
