@@ -8,14 +8,11 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@types/bootstrap": "^5.2.6",
-    "@types/node": "^18.14.0",
-    "nuxt": "^3.2.2",
+    "nuxt": "^3.2.3",
     "sass": "^1.58.3"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
-    "@skjnldsv/vue-plyr": "^7.3.0",
     "bootstrap": "^5.2.3"
   }
 }

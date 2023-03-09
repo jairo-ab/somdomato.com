@@ -9,6 +9,12 @@
 			"detail": "nuxt dev",
 			"runOptions": {
 				"runOn": "folderOpen"
+			},
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true
 			}
 		}
 	]

@@ -29,19 +29,18 @@ onMounted(() => {
   <div class="d-flex flex-column flex-md-row align-items-center">
     {{ song }}
     <div class="mt-2 mt-md-0" style="display: inline-flex; align-items: center">
-      <div class="plyr__controls">
-        <button @click.prevent="reload()" class="plyr__controls__item plyr__control" type="button" data-plyr="play" aria-label="Pause">
+      <!-- <div class="plyr__controls">
+        <button @click.prevent="reload()" class="plyr__controls__item plyr__control" type="button" data-plyr="play"
+          aria-label="Pause">
           <svg class="icon--not-pressed" aria-hidden="true" focusable="false">
             <use xlink:href="#plyr-restart"></use>
           </svg>
           <span class="plyr__sr-only">Reload</span>
         </button>
-      </div>
-      <vue-plyr>
-        <audio ref="player" crossorigin="true" controls>
-          <source ref="source" src="https://radio.somdomato.com/principal" type="audio/mp3" />
-        </audio>
-      </vue-plyr>
+      </div> -->
+      <audio ref="player" crossorigin="true" controls>
+        <source ref="source" src="https://radio.somdomato.com/principal" type="audio/mp3" />
+      </audio>
     </div>
   </div>
 </template>

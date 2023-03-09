@@ -12,7 +12,7 @@ const config = useRuntimeConfig()
 
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
           <ClientOnly>
-            <Plyr />
+            <Player />
           </ClientOnly>
         </nav>
       </div>
