@@ -5,7 +5,7 @@ const player = ref(null)
 const source = ref(null)
 
 function refresh() {
-  source.value.src = `${base}/geral?ts=` + ~~(Date.now() / 1000)
+  source.value.src = `${base}/principal?ts=` + ~~(Date.now() / 1000)
 }
 
 function reload() {
@@ -51,7 +51,7 @@ onMounted(() => {
 
       <vue-plyr>
         <audio ref="player" crossorigin="true" controls playsinline>
-          <source ref="source" src="https://radio.somdomato.com/geral" type="audio/mp3" />
+          <source ref="source" src="https://radio.somdomato.com/principal" type="audio/mp3" />
         </audio>
       </vue-plyr>
     </div>
