@@ -15,14 +15,16 @@ const loading = ref(true)
 
 function toggle() {
   if (player.value.paused) {
-    player.value.play()
+    reload()
   } else {
+    refresh()
     player.value.pause()
   }
   paused.value = !paused.value
 }
 
 function refresh() {
+  player.value.currentTime = 0;
   source.value = `${base}/principal?ts=` + ~~(Date.now() / 1000)
 }
 

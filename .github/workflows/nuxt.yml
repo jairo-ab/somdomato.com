@@ -34,7 +34,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
-            [ -f .env ] || cp .env.production .env
+            # [ -f .env ] || cp .env.production .env
+            cp -f .env.production .env
             pnpm install
             pnpm run build
             # sudo /usr/bin/systemctl restart nuxt.service

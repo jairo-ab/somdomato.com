@@ -4,7 +4,8 @@ export default defineNuxtConfig({
   css: ['~/assets/scss/main.scss'],
   runtimeConfig: {
     public: {
-      appName: process.env.NUXT_APP_NAME
+      appName: process.env.NUXT_APP_NAME,
+      apiUrl: process.env.NUXT_API_URL
     }
   }
 })
