@@ -1,6 +1,6 @@
 <script setup>
 const base = 'https://radio.somdomato.com'
-const mount = '/principal'
+const mount = 'principal'
 const song = ref('Rádio Som do Mato')
 const source = ref(`${base}/${mount}`)
 
@@ -8,10 +8,7 @@ const player = ref(null)
 const volume = ref(100)
 const open = ref(false)
 const paused = ref(true)
-const loading = ref(true)
-
-// <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-16a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2m5-2H7c-1.11 0-2 .89-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z"/></svg>
-// <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M2 5.27L3.28 4L21 21.72L19.73 23l-1.46-1.46c-.34.29-.77.46-1.27.46H7a2 2 0 0 1-2-2V8.27l-3-3M12 18a3 3 0 0 1-3-3c0-.76.28-1.46.75-2l-1.42-1.4C7.5 12.5 7 13.69 7 15a5 5 0 0 0 5 5c1.31 0 2.5-.5 3.4-1.33L14 17.25c-.55.47-1.24.75-2 .75m5-3a5 5 0 0 0-5-5h-.18l-6.7-6.7C5.41 2.54 6.14 2 7 2h10a2 2 0 0 1 2 2v13.18l-2-2.01V15M12 4c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2Z"/></svg>
+const speakerIcon = ref('speaker') 
 
 function toggle() {
   if (player.value.paused) {
@@ -20,238 +17,77 @@ function toggle() {
     refresh()
     player.value.pause()
   }
-  paused.value = !paused.value
+
+  paused.value = player.value.paused
 }
 
 function refresh() {
   player.value.currentTime = 0;
-  source.value = `${base}/principal?ts=` + ~~(Date.now() / 1000)
+  source.value = `${base}/${mount}?ts=` + ~~(Date.now() / 1000)
 }
 
 function reload() {
   refresh()
   player.value.load()
   player.value.play()
-}
-
-function syncVolume() {
-  player.value.volume = (volume.value / 100)
+  paused.value = player.value.paused
 }
 
 onMounted(() => {
   refresh()
 
-  setInterval(async () => {
-    const {
-      icestats: { source: { title } }
-    } = await (await fetch(`${base}/json`)).json()
-    song.value = title
-  }, 1000)
-
   player.value.onpause = _ => { refresh() }
+  player.value.volume = .8
+
+  setInterval(async () => {    
+    const { icestats: { source: { title } } } = await (await fetch(`${base}/json`)).json()
+    song.value = title
+  }, 5000)
 })
 
 watch(volume, (newVal) => {
+  speakerIcon.value = 'speaker'
+  if (newVal === 0) speakerIcon.value = 'speaker-mute'
   player.value.volume = (newVal / 100)
-}
-)
+})
 </script>
 <template>
-  <div class="audio-player">
-    <div class="loading" v-if="loading">
-      <div class="spinner"></div>
-    </div>
-    <Transition mode="out-in">
-      <div class="play-btn" v-if="paused">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
-          <path fill-rule="evenodd" d="M8.5 8.64L13.77 12L8.5 15.36V8.64M6.5 5v14l11-7" />
-        </svg>
+  <div class="player-container">
+    <div class="audio-player">
+      <Transition mode="out-in">
+        <div class="play-btn" v-if="paused">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
+            <path d="M8.5 8.64L13.77 12L8.5 15.36V8.64M6.5 5v14l11-7" />
+          </svg>
+        </div>
+        <div class="pause-btn" v-else>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
+            <path d="M14 19h4V5h-4M6 19h4V5H6v14Z" />
+          </svg>
+        </div>
+      </Transition>
+      <div class="refresh-btn" @click="reload">
+        <Icon name="refresh" />
       </div>
-      <div class="pause-btn" v-else>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
-          <path fill-rule="evenodd" d="M14 19h4V5h-4M6 19h4V5H6v14Z" />
-        </svg>
-      </div>
-    </Transition>
-    <div class="refresh-btn" @click="reload">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path fill="currentColor"
-          d="M2 12a9 9 0 0 0 9 9c2.39 0 4.68-.94 6.4-2.6l-1.5-1.5A6.706 6.706 0 0 1 11 19c-6.24 0-9.36-7.54-4.95-11.95C10.46 2.64 18 5.77 18 12h-3l4 4h.1l3.9-4h-3a9 9 0 0 0-18 0Z" />
-      </svg>
-    </div>
-    <Transition mode="out-in">
-      <div class="title truncate" v-if="!open">
-        <div>
+      <Transition mode="out-in">
+        <div class="text-truncate" v-if="!open">
           {{ song }}
         </div>
+        <div class="volume" v-else>
+          <input class="pin" type="range" min="0" max="100" v-model="volume" style="margin-right: 10px;">
+          {{ volume }}%
+        </div>
+      </Transition>
+      <div class="volume-btn" @click="open = !open">
+        <Icon :name="speakerIcon" />
       </div>
-      <div class="volume" v-else>
-        {{ volume }}%
-        <input class="pin" type="range" min="0" max="100" v-model="volume">
-      </div>
-    </Transition>
-    <div class="volume-btn" @click="open = !open">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path fill="currentColor"
-          d="m20.07 19.07l-1.41-1.41A7.955 7.955 0 0 0 21 12c0-2.22-.89-4.22-2.34-5.66l1.41-1.41A9.969 9.969 0 0 1 23 12c0 2.76-1.12 5.26-2.93 7.07m-2.83-2.83l-1.41-1.41A3.99 3.99 0 0 0 17 12c0-1.11-.45-2.11-1.17-2.83l1.41-1.41A5.98 5.98 0 0 1 19 12c0 1.65-.67 3.15-1.76 4.24M4 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m4 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m0 6a4 4 0 0 0-4 4a4 4 0 0 0 4 4a4 4 0 0 0 4-4a4 4 0 0 0-4-4m0 2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2Z" />
-      </svg>
+      <audio ref="player" crossorigin>
+        <source :src="source" type="audio/mpeg">
+      </audio>
     </div>
-    <audio ref="player" crossorigin>
-      <source :src="source" type="audio/mpeg">
-    </audio>
   </div>
 </template>
 <style lang="scss" scoped>
-* {
-  box-sizing: border-box;
-}
-
-.audio-player {
-  display: flex;
-  align-items: center;
-  height: 46px;
-  user-select: none;
-  -webkit-user-select: none;
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, .51);
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, .72);
-  // padding: 10px 0;
-  
-  div {
-    padding-right: 10px;
-  }
-
-  .title,
-  .play-btn,
-  .pause-btn,
-  .refresh-btn,
-  .volume-btn {
-    cursor: pointer;
-  }
-
-  
-  .title {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-
-    /* or some value */
-    div {
-      // width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-
-  .volume {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    min-width: 0;
-  }
-
-  .pin {
-    margin-left: 10px;
-  }
-
-  .spinner {
-    display: none;
-    width: 18px;
-    height: 18px;
-    background-image: url('@/assets/img/loading.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    animation: spin 0.4s linear infinite;
-  }
-  
-  .play-btn svg, .pause-btn svg {
-    height: 28px;
-  }
-
-  svg {
-    display: block;
-    fill: #fff;
-    height: 20px;
-  }
-
-  input {
-    max-width: 80px;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotateZ(0);
-  }
-
-  to {
-    transform: rotateZ(1turn);
-  }
-}
-
-// Input Range
-/*********** Baseline, reset styles ***********/
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
-}
-
-/* Removes default focus */
-input[type="range"]:focus {
-  outline: none;
-}
-
-/******** Chrome, Safari, Opera and Edge Chromium styles ********/
-/* slider track */
-input[type="range"]::-webkit-slider-runnable-track {
-  background-color: #fff;
-  border-radius: 0.3rem;
-  height: 0.35rem;
-}
-
-/* slider thumb */
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  /* Override default look */
-  appearance: none;
-  margin-top: -4px;
-  /* Centers thumb on the track */
-  background-color: #ffffff;
-  border-radius: 0.5rem;
-  height: .88rem;
-  width: .88rem;
-}
-
-input[type="range"]:focus::-webkit-slider-thumb {
-  outline: none;
-  // outline-offset: 0.125rem;
-}
-
-/*********** Firefox styles ***********/
-/* slider track */
-input[type="range"]::-moz-range-track {
-  background-color: #fff;
-  border-radius: 0.5rem;
-  height: 0.35rem;
-}
-
-/* slider thumb */
-input[type="range"]::-moz-range-thumb {
-  background-color: #fff;
-  border: none;
-  /*Removes extra border that FF applies*/
-  border-radius: 0.5rem;
-  height: .88rem;
-  width: .88rem;
-}
-
-input[type="range"]:focus::-moz-range-thumb {
-  outline: none;
-}
 
 .v-enter-active,
 .v-leave-active {
@@ -262,4 +98,207 @@ input[type="range"]:focus::-moz-range-thumb {
 .v-leave-to {
   opacity: 0;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+.player-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100vw;
+  min-width: 0;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audio-player {
+  --foreground-color: rgba(255, 255, 255, 0.62);
+  --background-color: rgba(0, 0, 0, 0.72);
+  --border-color: rgba(255, 255, 255, 0.72);
+  display: flex;
+  height: 46px;
+  width: 100%;
+  max-width: 600px;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  -webkit-user-select: none;
+  color: var(--foreground-color);
+  border-radius: 5px;
+  background-color: #FBAB7E;
+  background-image: linear-gradient(90deg, #FBAB7E 0%, #c4a24d 100%);
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.72);
+  padding: 0 10px;
+  border: 3px solid var(--border-color);
+
+  .hidden {
+    display: none;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    margin-right: .7rem;
+  }
+
+  div:last-of-type {
+    margin-right: 0;    
+  }
+
+  .title,
+  .play-btn,
+  .pause-btn,
+  .refresh-btn,
+  .volume-btn {
+    cursor: pointer;
+  }
+
+  .volume {
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+
+  svg {
+    display: block;
+    fill: var(--foreground-color);
+    width: 20px;
+    height: 20px;
+  }
+
+  .play-btn svg,
+  .pause-btn svg {
+    height: 28px;
+  }
+
+  input {
+    max-width: 80px;
+    min-width: 0px;
+  }
+}
+
+input[type="range"] {
+  color: rgba(0, 0, 0, 0.23);
+  // color: #f07167;
+  font-size: 1.5rem;
+  width: 12.5em;
+  --border-radius: 0;
+  --thumb-height: 1.125em;
+  --track-color: rgba(255, 255, 255, 0.1);
+  --track-sel-color: rgba(255, 255, 255, 0.2);
+  --track-height: 0.125em;
+  --brightness-hover: 180%;
+  --brightness-down: 80%;
+  --clip-edges: 0.125em;
+}
+
+/* === range commons === */
+input[type="range"] {
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* === WebKit specific styles === */
+input[type="range"],
+input[type="range"]::-webkit-slider-runnable-track,
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  transition: all ease 100ms;
+  height: var(--thumb-height);
+}
+
+input[type="range"]::-webkit-slider-runnable-track,
+input[type="range"]::-webkit-slider-thumb {
+  position: relative;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
+  --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
+  --clip-further: calc(100% + 1px);
+  --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0 100vmax currentColor;
+
+  width: var(--thumb-width, var(--thumb-height));
+  background: linear-gradient(currentColor 0 0) scroll no-repeat left center / 50% calc(var(--track-height) + 1px);
+  background-color: currentColor;
+  box-shadow: var(--box-fill);
+  border-radius: var(--box-radius);
+
+  filter: brightness(100%);
+  clip-path: polygon(100% -1px,
+      var(--clip-edges) -1px,
+      0 var(--clip-top),
+      -100vmax var(--clip-top),
+      -100vmax var(--clip-bottom),
+      0 var(--clip-bottom),
+      var(--clip-edges) 100%,
+      var(--clip-further) var(--clip-further));
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center 100% calc(var(--track-height) + 1px);
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
+/* === Firefox specific styles === */
+input[type="range"],
+input[type="range"]::-moz-range-track,
+input[type="range"]::-moz-range-thumb {
+  appearance: none;
+  transition: all ease 100ms;
+  height: var(--thumb-height);
+}
+
+input[type="range"]::-moz-range-track,
+input[type="range"]::-moz-range-thumb,
+input[type="range"]::-moz-range-progress {
+  background: var(--track-color);
+}
+
+input[type="range"]::-moz-range-thumb {
+  opacity: 0;
+  background: currentColor;
+  border: 0;
+  width: var(--thumb-width, var(--thumb-height));
+  border-radius: var(--thumb-width, var(--thumb-height));
+  cursor: ponter;
+}
+
+input[type="range"]:active::-moz-range-thumb {
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  background: var(--track-color);
+}
+
+input[type="range"]::-moz-range-progress {
+  appearance: none;
+  background: currentColor;
+  transition-delay: 40ms;
+}
+
+input[type="range"]::-moz-range-track,
+input[type="range"]::-moz-range-progress {
+  height: calc(var(--track-height) + 1px);
+  border-radius: var(--track-height);
+  // background: ;
+}
+
+// input[type="range"]::-moz-range-thumb,
+// input[type="range"]::-moz-range-progress {
+//   filter: brightness(100%);
+// }
 </style>
