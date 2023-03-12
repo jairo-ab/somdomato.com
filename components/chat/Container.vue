@@ -1,6 +1,6 @@
 <template>
   <div class="iframe-container">
-    <iframe src="https://chat.somdomato.com" allowfullscreen></iframe>
+    <iframe src="https://chat.somdomato.com" allow="camera; microphone" allowfullscreen></iframe>
   </div>
 </template>
 <style scoped>
