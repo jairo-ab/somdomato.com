@@ -39,8 +39,9 @@ onMounted(() => {
   player.value.onpause = _ => { refresh() }
   player.value.volume = .8
 
-  setInterval(async () => {    
+  setInterval(async () => {
     const { icestats: { source: { title } } } = await (await fetch(`${base}/json`)).json()
+    //const title = await $fetch('/api/stats')
     song.value = title
   }, 5000)
 })

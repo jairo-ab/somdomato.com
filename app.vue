@@ -1,6 +1,3 @@
-<script setup lang="ts">
-const config = useRuntimeConfig()
-</script>
 <template>
   <NuxtLayout>
     <Head>

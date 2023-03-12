@@ -1,12 +1,9 @@
-<script setup lang="ts">
-const config = useRuntimeConfig()
-</script>
 <template>
   <header>
     <div class="fixed-top">
       <div class="container d-flex flex-column flex-md-row align-items-center my-1">
         <NuxtLink class="py-0 d-flex align-items-center fs-3 text-white text-decoration-none text-nowrap" to="/">
-          <img src="/img/logotipo.svg" :alt="config.appName" height="32" class="d-inline-block align-middle me-1" />
+          <img src="/img/logotipo.svg" :alt="$config.appName" height="32" class="d-inline-block align-middle me-1" />
           Som do Mato
         </NuxtLink>
 
