@@ -1,6 +1,6 @@
 <script setup>
 const reqResult = ref(null)
-const requestUrl = `${$config.apiUrl}/pedir`
+const requestUrl = `${$configs.apiUrl}/pedir`
 
 defineProps({ data: Object })
 

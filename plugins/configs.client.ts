@@ -1,4 +1,10 @@
-export default defineNuxtPlugin(_ => {
+export default defineNuxtPlugin((NuxtApp) => {
   const configs = useRuntimeConfig()
-  return { provide: { configs } }
+
+  return { 
+    provide: { 
+      configs,
+      injectionTest: 'test'
+    } 
+  }
 })

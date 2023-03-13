@@ -1,3 +1,3 @@
 <template>
-  <img src="/img/logo.svg" class="img-fluid" :alt="$config.appName" />
+  <img src="/img/logo.svg" class="img-fluid" :alt="$configs.appName" />
 </template>

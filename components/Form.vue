@@ -3,7 +3,7 @@ const search = ref('')
 const result = ref(null)
 
 async function submit() {
-  const { data } = await $fetch(`${$config.apiUrl}/pesquisa`, {
+  const { data } = await $fetch(`${$configs.apiUrl}/pesquisa`, {
     method: 'POST',
     body: JSON.stringify(search.value)
   })
