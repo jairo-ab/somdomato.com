@@ -3,6 +3,7 @@ const base = 'https://radio.somdomato.com'
 const mount = 'principal'
 const song = ref('Rádio Som do Mato')
 const source = ref(`${base}/${mount}`)
+const app_url = location.href
 
 const player = ref(null)
 const volume = ref(100)
@@ -40,8 +41,24 @@ onMounted(() => {
   player.value.volume = .8
 
   setInterval(async () => {
-    const { icestats: { source: { title } } } = await (await fetch(`${base}/json`)).json()
-    //const title = await $fetch('/api/stats')
+    const { icestats: { source: { title, server_description } } } = await (await fetch(`${base}/json`)).json()
+    const titles = title.split('-')
+
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: titles[1].trim(),
+        artist: titles[0],
+        album: server_description,
+        artwork: [
+          { src: `${app_url}/img/album/96x96.png`,   sizes: '96x96',   type: 'image/png' },
+          { src: `${app_url}/img/album/128x128.png`, sizes: '128x128', type: 'image/png' },
+          { src: `${app_url}/img/album/192x192.png`, sizes: '192x192', type: 'image/png' },
+          { src: `${app_url}/img/album/256x256.png`, sizes: '256x256', type: 'image/png' },
+          { src: `${app_url}/img/album/384x384.png`, sizes: '384x384', type: 'image/png' },
+          { src: `${app_url}/img/album/512x512.png`, sizes: '512x512', type: 'image/png' },
+        ]
+      })
+    }
     song.value = title
   }, 5000)
 })
