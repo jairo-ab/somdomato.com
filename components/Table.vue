@@ -1,6 +1,7 @@
 <script setup>
+const configs = useRuntimeConfig()
 const reqResult = ref(null)
-const requestUrl = `${$configs.apiUrl}/pedir`
+const requestUrl = `${configs.public.apiUrl}/pedir`
 
 defineProps({ data: Object })
 

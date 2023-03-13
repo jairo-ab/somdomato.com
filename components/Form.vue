@@ -1,9 +1,10 @@
 <script setup>
 const search = ref('')
 const result = ref(null)
+const configs = useRuntimeConfig()
 
 async function submit() {
-  const { data } = await $fetch(`${$configs.apiUrl}/pesquisa`, {
+  const { data } = await $fetch(`${configs.public.apiUrl}/pesquisa`, {
     method: 'POST',
     body: JSON.stringify(search.value)
   })
