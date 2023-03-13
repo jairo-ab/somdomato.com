@@ -25,4 +25,17 @@
   left: 0;
   border: 0;
 }
+
+@media (max-width: 768px){
+  .iframe-container {
+    height: calc(100vh - 300px);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px){
+  .iframe-container {
+    height: calc(100vh - 270px);
+  }
+}
+
 </style>
