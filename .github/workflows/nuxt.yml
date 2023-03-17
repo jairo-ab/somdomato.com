@@ -38,4 +38,4 @@ jobs:
             cp -f .env.production .env
             pnpm install
             pnpm run build
-            # sudo /usr/bin/systemctl restart nuxt.service
+            sudo /usr/bin/systemctl restart nuxt.service
