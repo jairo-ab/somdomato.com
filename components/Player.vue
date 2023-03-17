@@ -1,12 +1,11 @@
 <script setup>
 const base = 'https://radio.somdomato.com'
 const mount = 'principal'
-const song = ref('Rádio Som do Mato')
 const source = ref(`${base}/${mount}`)
 const app_url = location.href
 
 const player = ref(null)
-const volume = ref(100)
+const volume = ref(90)
 const paused = ref(true)
 const speakerIcon = ref('speaker')
 
@@ -39,10 +38,10 @@ onMounted(() => {
   refresh()
 
   player.value.onpause = _ => { refresh() }
-  player.value.volume = .8
+  player.value.volume = .9
 
   setInterval(async () => {
-    const { icestats: { source: { title, server_description } } } = await (await fetch(`${base}/json`)).json()
+    const { icestats: { source: { title, listeners, server_description } } } = await (await fetch(`${base}/json`)).json()
     const titles = title.split('-')
     const { currentTime, playbackRate } = player.value
 
@@ -67,7 +66,8 @@ onMounted(() => {
         duration: currentTime + 6
       });
     }
-    song.value = title
+
+    emit('song', {title, listeners})
   }, 5000)
 })
 

@@ -1,8 +1,13 @@
 <script setup>
 const configs = useRuntimeConfig()
+const listen = ref('')
+
+function getListeners(listeners) {
+  listen.value = listeners
+}
 </script>
 <template>
-  <LayoutDoubleHeader />
+  <LayoutDoubleHeader @listeners="getListeners" />
   <main class="flex-shrink-0">
     <div class="container">
 
@@ -21,5 +26,5 @@ const configs = useRuntimeConfig()
       <slot />
     </div>
   </main>
-  <LayoutFooter />
+  <LayoutFooter :listeners="listen" />
 </template>
