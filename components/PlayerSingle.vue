@@ -7,10 +7,9 @@ const app_url = location.href
 
 const player = ref(null)
 const volume = ref(100)
+const open = ref(false)
 const paused = ref(true)
-const speakerIcon = ref('speaker')
-
-const emit = defineEmits(['song'])
+const speakerIcon = ref('speaker') 
 
 function toggle() {
   if (player.value.paused) {
@@ -52,7 +51,7 @@ onMounted(() => {
         artist: titles[0],
         album: server_description,
         artwork: [
-          { src: `${app_url}/img/album/96x96.png`, sizes: '96x96', type: 'image/png' },
+          { src: `${app_url}/img/album/96x96.png`,   sizes: '96x96',   type: 'image/png' },
           { src: `${app_url}/img/album/128x128.png`, sizes: '128x128', type: 'image/png' },
           { src: `${app_url}/img/album/192x192.png`, sizes: '192x192', type: 'image/png' },
           { src: `${app_url}/img/album/256x256.png`, sizes: '256x256', type: 'image/png' },
@@ -95,11 +94,16 @@ watch(volume, (newVal) => {
       <div class="refresh-btn" @click="reload">
         <Icon name="refresh" />
       </div>
-      <div class="volume">
-        <input class="pin" type="range" min="0" max="100" v-model="volume" style="margin-right: 10px;">
-        {{ volume }}%
-      </div>
-      <div class="volume-btn">
+      <Transition mode="out-in">
+        <div class="text-truncate" v-if="!open">
+          {{ song }}
+        </div>
+        <div class="volume" v-else>
+          <input class="pin" type="range" min="0" max="100" v-model="volume" style="margin-right: 10px;">
+          {{ volume }}%
+        </div>
+      </Transition>
+      <div class="volume-btn" @click="open = !open">
         <Icon :name="speakerIcon" />
       </div>
       <audio ref="player" crossorigin>
@@ -109,6 +113,7 @@ watch(volume, (newVal) => {
   </div>
 </template>
 <style lang="scss" scoped>
+
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
@@ -168,7 +173,7 @@ watch(volume, (newVal) => {
   }
 
   div:last-of-type {
-    margin-right: 0;
+    margin-right: 0;    
   }
 
   .title,

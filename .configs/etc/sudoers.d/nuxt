@@ -1,0 +1,1 @@
+nginx ALL=(root) NOPASSWD: /usr/bin/systemctl stop nuxt.service, /usr/bin/systemctl start nuxt.service, /usr/bin/systemctl restart nuxt.service
