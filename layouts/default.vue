@@ -2,7 +2,7 @@
 const configs = useRuntimeConfig()
 </script>
 <template>
-  <LayoutHeader />
+  <LayoutDoubleHeader />
   <main class="flex-shrink-0">
     <div class="container">
 
