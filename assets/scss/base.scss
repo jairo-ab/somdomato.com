@@ -9,9 +9,15 @@ body,
   flex-direction: column;
 }
 
-main > .container,
-main > .container-fluid {
-  padding: 150px 15px 0;
+// main > .container,
+// main > .container-fluid {
+//   padding: 150px 15px 0;
+// }
+
+body { padding-top: 150px; }
+
+@media screen and (max-width: 768px) {
+    body { padding-top: 250px; }
 }
 
 .fill {

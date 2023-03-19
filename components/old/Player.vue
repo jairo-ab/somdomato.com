@@ -43,11 +43,12 @@ onMounted(() => {
   setInterval(async () => {
     const { icestats: { source: { title, listeners, server_description } } } = await (await fetch(`${base}/json`)).json()
     const titles = title.split('-')
+    const { currentTime, playbackRate } = player.value
 
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: titles[1].trim(),
-        artist: titles[0].trim(),
+        artist: titles[0],
         album: server_description,
         artwork: [
           { src: `${app_url}/img/album/96x96.png`, sizes: '96x96', type: 'image/png' },
@@ -59,16 +60,14 @@ onMounted(() => {
         ]
       })
 
-      if (player.value) {
-        navigator.mediaSession.setPositionState({
-          // playbackRate: player.value.playbackRate,
-          position: player.value.currentTime,
-          duration: player.value.currentTime + 6
-        })
-      }
+      navigator.mediaSession.setPositionState({
+        playbackRate: playbackRate,
+        position: currentTime,
+        duration: currentTime + 6
+      });
     }
 
-    emit('song', { title, listeners })
+    emit('song', {title, listeners})
   }, 5000)
 })
 
@@ -79,32 +78,34 @@ watch(volume, (newVal) => {
 })
 </script>
 <template>
-  <div class="audio-player">
-    <Transition mode="out-in">
-      <div class="play-btn" v-if="paused">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
-          <path d="M8.5 8.64L13.77 12L8.5 15.36V8.64M6.5 5v14l11-7" />
-        </svg>
+  <div class="player-container">
+    <div class="audio-player">
+      <Transition mode="out-in">
+        <div class="play-btn" v-if="paused">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
+            <path d="M8.5 8.64L13.77 12L8.5 15.36V8.64M6.5 5v14l11-7" />
+          </svg>
+        </div>
+        <div class="pause-btn" v-else>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
+            <path d="M14 19h4V5h-4M6 19h4V5H6v14Z" />
+          </svg>
+        </div>
+      </Transition>
+      <div class="refresh-btn" @click="reload">
+        <Icon name="refresh" />
       </div>
-      <div class="pause-btn" v-else>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24" @click="toggle">
-          <path d="M14 19h4V5h-4M6 19h4V5H6v14Z" />
-        </svg>
+      <div class="volume">
+        <input class="pin" type="range" min="0" max="100" v-model="volume" style="margin-right: 10px;">
+        {{ volume }}%
       </div>
-    </Transition>
-    <div class="refresh-btn" @click="reload">
-      <Icon name="refresh" />
+      <div class="volume-btn">
+        <Icon :name="speakerIcon" />
+      </div>
+      <audio ref="player" crossorigin>
+        <source :src="source" type="audio/mpeg">
+      </audio>
     </div>
-    <div class="volume">
-      <input class="pin" type="range" min="0" max="100" v-model="volume" style="margin-right: 10px;">
-      {{ volume }}%
-    </div>
-    <div class="volume-btn">
-      <Icon :name="speakerIcon" />
-    </div>
-    <audio ref="player" crossorigin>
-      <source :src="source" type="audio/mpeg">
-    </audio>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -141,7 +142,7 @@ watch(volume, (newVal) => {
   --background-color: rgba(0, 0, 0, 0.72);
   --border-color: rgba(255, 255, 255, 0.72);
   display: flex;
-  height: 40px;
+  height: 46px;
   width: 100%;
   max-width: 600px;
   align-items: center;
@@ -151,7 +152,7 @@ watch(volume, (newVal) => {
   color: var(--foreground-color);
   border-radius: 5px;
   background-color: #FBAB7E;
-  background-image: linear-gradient(90deg, #5c5c5c 0%, #c4a24d 100%);
+  background-image: linear-gradient(90deg, #FBAB7E 0%, #c4a24d 100%);
   box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.72);
   padding: 0 10px;
   border: 3px solid var(--border-color);
