@@ -43,7 +43,6 @@ onMounted(() => {
   setInterval(async () => {
     const { icestats: { source: { title, listeners, server_description } } } = await (await fetch(`${base}/json`)).json()
     const titles = title.split('-')
-    const { currentTime, playbackRate } = player.value
 
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
@@ -60,11 +59,13 @@ onMounted(() => {
         ]
       })
 
-      navigator.mediaSession.setPositionState({
-        playbackRate: playbackRate,
-        position: currentTime,
-        duration: currentTime + 6
-      });
+      if (player.value && !player.value.paused) {
+        navigator.mediaSession.setPositionState({
+          playbackRate: player.value.playbackRate,
+          position: player.value.currentTime,
+          duration: player.value.currentTime + 6
+        })
+      }
     }
 
     emit('song', {title, listeners})
