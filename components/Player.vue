@@ -209,13 +209,15 @@ input[type="range"] {
   font-size: 1.5rem;
   width: 12.5em;
   --border-radius: 0;
-  --thumb-height: 1.125em;
+  --thumb-height: .125em;
+  --thumb-width: .25em;
+  --thumb-color: transparent;
+  --track-height: .125em;
   --track-color: rgba(255, 255, 255, 0.1);
   --track-sel-color: rgba(255, 255, 255, 0.2);
-  --track-height: 0.125em;
   --brightness-hover: 180%;
   --brightness-down: 80%;
-  --clip-edges: 0.125em;
+  --clip-edges: 0.01em;
 }
 
 /* === range commons === */
@@ -246,8 +248,10 @@ input[type="range"]::-webkit-slider-thumb {
   --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0 100vmax currentColor;
 
   width: var(--thumb-width, var(--thumb-height));
+  // background: linear-gradient(currentColor 0 0) scroll no-repeat left center / 50% calc(var(--track-height) + 1px);
   background: linear-gradient(currentColor 0 0) scroll no-repeat left center / 50% calc(var(--track-height) + 1px);
-  background-color: currentColor;
+  // background-color: currentColor;
+  background-color: transparent;
   box-shadow: var(--box-fill);
   border-radius: var(--box-radius);
 

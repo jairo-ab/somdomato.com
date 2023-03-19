@@ -1,21 +1,23 @@
 <script setup>
 const configs = useRuntimeConfig()
 const title = ref('')
-const whatsapp = ref('')
-const facebook = ref('')
-const twitter = ref('')
+const search = ref('')
 
-const emit = defineEmits(['listeners'])
+const whatsapp = ref('')
+// const facebook = ref('')
+// const twitter = ref('')
+
+const emit = defineEmits(['listeners', 'searchResults'])
 
 function songChange(songData) {
   title.value = songData.title
   emit('listeners', songData.listeners)
-  whatsapp.value = 'https://wa.me/?text=' + encodeURIComponent(songData.title) + ' na Rádio Som do Mato! https://somdomato.com'
+  whatsapp.value = 'https://wa.me/?text=' + encodeURIComponent(`Ouça agora *${songData.title}* na _Rádio Som do Mato_!\n\nhttps://somdomato.com`)
 }
 
 async function doSearch() {
-  const { songs } = await $fetch('http://localhost:4000/songs/?q=a')
-  console.log(songs)
+  const { songs } = await $fetch(`http://localhost:4000/songs/?q=${search.value}`)
+  emit('searchResults', songs)
 }
 </script>
 <template>
@@ -48,7 +50,7 @@ async function doSearch() {
           <span class="fs-4 text-white">Som do Mato</span>
         </NuxtLink>
         <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" @submit.prevent="doSearch">
-          <input type="search" class="form-control shadow-none bg-dark text-white" placeholder="Pesquise a música ou artista" aria-label="Pesquisa">
+          <input v-model="search" type="search" class="form-control shadow-none bg-dark text-white" placeholder="Pesquise a música ou artista" aria-label="Pesquisa">
         </form>
       </div>
     </header>

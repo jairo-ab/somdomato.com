@@ -1,10 +1,5 @@
 {
-  "name": "somdomato.com",
-  "version": "1.0.1",
-  "description": "Front-end da Rádio Som do Mato",
-  "keywords": [],
-  "author": "Lucas Saliés Brum <sistematico@gmail.com> (https://lucasbrum.net)",
-  "license": "ISC",
+  "private": true,
   "scripts": {
     "build": "nuxt build --hostname 127.0.0.1 --port 3000",
     "dev": "nuxt dev",
@@ -23,7 +18,6 @@
     "@sweetalert2/theme-dark": "^5.0.15",
     "bootstrap": "^5.2.3",
     "nuxt-umami": "^2.0.1",
-    "semver": "^7.3.8",
     "sweetalert2": "^11.7.3"
   }
 }

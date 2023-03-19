@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   plugins: [
-    '~/plugins/configs.client.ts',
     '~/plugins/bootstrap.client.ts',
+    '~/plugins/swal2.client.js',
     '~/plugins/websockets.client.ts'
   ],
   typescript: { shim: false },
