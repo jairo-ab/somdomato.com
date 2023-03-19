@@ -30,12 +30,12 @@ async function doSearch() {
         <ul class="nav">
           <li class="nav-item">
             <span class="nav-link px-2" style="color: #6c757d;">
-              <a href="#" class="underline-none disabled" style="color: #6c757d;">
+              <a href="#" class="text-decoration-none me-1 disabled" style="color: #6c757d;">
                 {{ title }}
               </a>
               <a :href="whatsapp"><Icon name="whatsapp" /></a>
-              <a href=""><Icon name="twitter" /></a>
-              <a href=""><Icon name="facebook" /></a>
+              <!-- <a href=""><Icon name="twitter" /></a> -->
+              <!-- <a href=""><Icon name="facebook" /></a> -->
             </span>
           </li>
         </ul>
