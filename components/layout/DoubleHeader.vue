@@ -1,24 +1,21 @@
 <script setup>
 const configs = useRuntimeConfig()
-
 const title = ref('')
-const search = ref('')
-
 const whatsapp = ref('')
 const facebook = ref('')
 const twitter = ref('')
 
-const emit = defineEmits(['listeners', 'searchSongResults'])
+const emit = defineEmits(['listeners'])
 
 function songChange(songData) {
   title.value = songData.title
   emit('listeners', songData.listeners)
-  whatsapp.value = 'https://wa.me/?text=' + encodeURIComponent(`Ouça agora _${songData.title}_ na *Rádio Som do Mato*!\n\nhttps://somdomato.com`)
+  whatsapp.value = 'https://wa.me/?text=' + encodeURIComponent(songData.title) + ' na Rádio Som do Mato! https://somdomato.com'
 }
 
-async function searchSong() {
-  const songs = await $fetch('http://localhost:4000/songs/?q=' + search.value)
-  emit('searchSongResults', songs)
+async function doSearch() {
+  const { songs } = await $fetch('http://localhost:4000/songs/?q=a')
+  console.log(songs)
 }
 </script>
 <template>
@@ -32,11 +29,13 @@ async function searchSong() {
         </div>
         <ul class="nav">
           <li class="nav-item">
-            <span class="d-inline-block nav-link text-truncate" style="color: #6c757d;">
-              {{ title }}
-              <a :href="whatsapp">
-                <Icon name="whatsapp" />
+            <span class="nav-link px-2" style="color: #6c757d;">
+              <a href="#" class="text-decoration-none me-1 disabled" style="color: #6c757d;">
+                {{ title }}
               </a>
+              <a :href="whatsapp"><Icon name="whatsapp" /></a>
+              <!-- <a href=""><Icon name="twitter" /></a> -->
+              <!-- <a href=""><Icon name="facebook" /></a> -->
             </span>
           </li>
         </ul>
@@ -48,9 +47,8 @@ async function searchSong() {
           <img src="/img/logotipo.svg" :alt="configs.public.appName" height="32" class="bi me-2" />
           <span class="fs-4 text-white">Som do Mato</span>
         </NuxtLink>
-        <form method="post" class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" @submit.prevent="searchSong">
-          <input v-model="search" type="search" class="form-control shadow-none bg-dark text-white"
-            placeholder="Pesquise a música ou artista" aria-label="Pesquisa">
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" @submit.prevent="doSearch">
+          <input type="search" class="form-control shadow-none bg-dark text-white" placeholder="Pesquise a música ou artista" aria-label="Pesquisa">
         </form>
       </div>
     </header>
@@ -71,5 +69,5 @@ a {
   border: 2px solid #ced4da !important;
   outline: none !important;
   box-shadow: none !important;
-}
+} 
 </style>
