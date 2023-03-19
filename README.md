@@ -1,8 +1,10 @@
-# Nuxt 3 Minimal Starter
+# Som do Mato
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+[![Node.js CD](https://github.com/sistematico/somdomato.com/actions/workflows/nuxt.yml/badge.svg)](https://github.com/sistematico/somdomato.com/actions/workflows/nuxt.yml)
 
-## Setup
+Uma web rádio usando o [Nuxt 3](https://nuxt.com).
+
+## Instalação
 
 Make sure to install the dependencies:
 
@@ -17,7 +19,7 @@ npm install
 pnpm install
 ```
 
-## Development Server
+## Servidor de Desenvolvimento
 
 Start the development server on http://localhost:3000
 
@@ -25,18 +27,18 @@ Start the development server on http://localhost:3000
 npm run dev
 ```
 
-## Production
+## Produção
 
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
+Build da aplicação para produção:
 
 ```bash
-npm run preview
+pnpm run build
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Pre-ver o build de produção:
+
+```bash
+pnpm run preview
+```
+
+Leia a documentação de [deploy do Nuxt](https://nuxt.com/docs/getting-started/deployment) para mais informações.

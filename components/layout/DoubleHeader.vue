@@ -49,8 +49,10 @@ async function doSearch() {
           <img src="/img/logotipo.svg" :alt="configs.public.appName" height="32" class="bi me-2" />
           <span class="fs-4 text-white">Som do Mato</span>
         </NuxtLink>
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" @submit.prevent="doSearch">
-          <input v-model="search" type="search" class="form-control shadow-none bg-dark text-white" placeholder="Pesquise a música ou artista" aria-label="Pesquisa">
+        <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" @submit.prevent="doSearch"> -->
+        <form class="d-flex" role="search" @submit.prevent="doSearch">
+          <input v-model="search" type="search" class="form-control shadow-none bg-dark text-white me-1" placeholder="Pesquise a música ou artista" aria-label="Pesquisa">
+          <button class="btn btn-outline-warning" type="submit" @click.prevent="doSearch">Pesquisar</button>
         </form>
       </div>
     </header>
