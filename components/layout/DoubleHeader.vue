@@ -16,8 +16,8 @@ function songChange(songData) {
 }
 
 async function doSearch() {
-  const { songs } = await $fetch(`http://localhost:4000/songs/?q=${search.value}`)
-  emit('searchResults', songs)
+  const { songs, total } = await $fetch(`http://localhost:4000/songs/?q=${search.value}`)
+  emit('searchResults', { songs, total })
 }
 </script>
 <template>
